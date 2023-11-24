@@ -1,6 +1,6 @@
 node{    
     stage('code checkout'){
-        git 'https://github.com/AKS144/capstone-project.git'
+        git branch: 'main', credentialsId: 'abhi144k@gmail.com', url: 'https://github.com/AKS144/capstone-project.git'
     }    
     stage('code build'){
         sh 'mvn clean install'
