@@ -12,4 +12,4 @@
     command: sudo systemctl start docker
 
   - name: deploy insureme application
-    command: sudo docker run -itd -p 8081:8081 --name insure-me1  abhi144k/insureme:1.0
+    command: sudo docker run -itd -p 8081:8081 abhi144k/insureme:1.0
