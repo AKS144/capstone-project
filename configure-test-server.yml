@@ -2,14 +2,28 @@
 - hosts: test-server
   become: true
   tasks:
-  - name: update apt
-    command: sudo apt-get update
+    - name: Update apt
+      apt:
+        update_cache: yes
 
-  - name: install docker
-    command: sudo apt install -y docker.io
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
 
-  - name: start docker service
-    command: sudo systemctl start docker
+    - name: Start Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
 
-  - name: deploy insureme application
-    command: sudo docker run -itd -p 8081:8081 abhi144k/insureme:1.0
+    - name: Stop existing container (if running)
+      command: sudo docker ps -q --filter "publish=8081" | xargs -r sudo docker stop
+      ignore_errors: yes
+
+    - name: Remove old container
+      command: sudo docker ps -aq --filter "publish=8081" | xargs -r sudo docker rm
+      ignore_errors: yes
+
+    - name: Deploy InsureMe application
+      command: sudo docker run -itd --name insureme-container -p 8081:8081 abhi144k/insureme:1.0
